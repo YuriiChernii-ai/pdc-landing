@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дизайн Хата</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&family=Inter+Tight:ital,wght@0,400..700;1,700&display=swap" rel="stylesheet">
+<style>
+/* Mentors sub-page ("Дизайн Хата"), Figma frame 1025:1903 */
+:root{--blue:#315eff;--green:#e0ff63;--green-100:#e0ffc7;--ink:#3c315b;--dark:#140018;--dark-text:#dbe8fb;--grey-bg:#f2f6f6;--orange:#fe682e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter Tight",system-ui,sans-serif;font-weight:500;color:#000;background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:none}
+a{color:inherit;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;height:54px;padding:0 24px;border-radius:12px;font-weight:600;font-size:16px;line-height:1.4;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-green{background:var(--green);color:#000;box-shadow:0 0 0 1px var(--green-100) inset,0 0 0 2px rgba(224,255,99,.4)}
+.btn-dark{background:#141516;color:#fff;box-shadow:0 0 0 1px #252525 inset,0 0 0 2px rgba(37,37,37,.4)}
+.btn-orange{background:var(--orange);color:#fff;height:44px;box-shadow:0 0 0 1px #f58c63 inset,0 0 0 2px rgba(254,104,46,.4)}
+
+/* header (Figma Header 1216:3730): logo · nav pill · subscribe */
+.abs{position:absolute}
+.stage{position:relative;width:1440px;margin:0 auto}
+.header{height:88px;padding-top:16px;margin-bottom:16px}
+.header .logo{left:119px;top:0;width:104px;height:72px;z-index:2}
+.nav{left:481px;top:12px;width:478px;height:48px;border-radius:12px;background:#f7f6ff;display:flex;align-items:center;justify-content:center;gap:4px}
+.nav a{font-size:14px;line-height:1.4;font-weight:500;color:#000;padding:6px 12px;border-radius:8px;transition:background .15s}
+.nav a:hover{background:#fff}
+.header .btn{left:1187px;top:14px;height:44px;width:123px;padding:0;font-size:14px;font-weight:500;line-height:1.4}
+
+/* hero (1025:1888): sky → copy → mentor cards (rise on scroll) → village */
+.hero{position:relative;height:1000px;margin:0 10px;border-radius:32px;overflow:hidden;background:#c5cdf6}
+.hero-stage{position:absolute;left:50%;top:0;width:1420px;height:1000px;margin-left:-710px}
+.hero .sky{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0}
+.hero .village{position:absolute;left:0;bottom:0;width:100%;min-width:1416px;z-index:4;pointer-events:none}
+.hero-copy{position:absolute;left:353px;top:48px;width:714px;z-index:1;display:flex;flex-direction:column;align-items:center;gap:32px;text-align:center;will-change:transform}
+.hero-copy .t{display:flex;flex-direction:column;align-items:center;gap:16px}
+.pill{display:inline-flex;align-items:center;padding:4px 16px;border-radius:999px;background:#734af0;color:#fff;font-weight:600;font-size:16px;line-height:1.4}
+.hero-copy h1{font-weight:400;font-size:56px;line-height:1;letter-spacing:-.01em;color:var(--ink)}
+.hero-copy p{font-family:Inter,sans-serif;font-weight:500;font-size:18px;line-height:1.35;color:var(--ink)}
+/* mentor playing cards */
+.deck{position:absolute;inset:0;z-index:2;pointer-events:none;transform-origin:50% 100%;perspective:1600px;perspective-origin:50% 40%}
+/* card box matches the reference card proportions; its pose is a projective matrix (see script) */
+.pcard{position:absolute;left:0;top:0;width:200px;height:280px;pointer-events:auto;transform-origin:50% 50%;will-change:transform;cursor:pointer}
+.pcard .face{position:absolute;inset:0;border-radius:14px;background:#fbf5e6;padding:9px;
+  box-shadow:0 1px 0 #e4d9bd inset,0 18px 40px -12px rgba(30,20,70,.45),0 2px 6px rgba(30,20,70,.2);transition:box-shadow .25s}
+.pcard:hover .face{box-shadow:0 1px 0 #e4d9bd inset,0 28px 60px -14px rgba(30,20,70,.55),0 2px 6px rgba(30,20,70,.2)}
+.frame{position:relative;width:100%;height:100%;border:2px solid var(--c);border-radius:8px;overflow:hidden;background:var(--bg)}
+.half{position:absolute;left:0;right:0;height:50%;overflow:hidden;background:var(--bg);isolation:isolate}
+.half.top{top:0}
+.half.bot{bottom:0;transform:rotate(180deg)}
+.half img{position:absolute;left:50%;top:-6px;width:118%;transform:translateX(-50%);filter:url(#ink);mix-blend-mode:multiply}
+/* folk ornament strip behind the portraits */
+.half::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(circle at 12% 18%,var(--o) 0 5px,transparent 6px),
+  radial-gradient(circle at 88% 18%,var(--o) 0 5px,transparent 6px),
+  repeating-linear-gradient(135deg,transparent 0 9px,rgba(255,255,255,.18) 9px 11px)}
+.diag{position:absolute;left:-10%;right:-10%;top:50%;height:2px;background:var(--c);transform:rotate(-14deg)}
+.ribbon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-14deg);background:#fbf5e6;border:2px solid var(--c);border-radius:6px;padding:3px 10px;font-family:Caveat,cursive;font-size:20px;line-height:1;color:var(--c);white-space:nowrap}
+.idx{position:absolute;display:flex;flex-direction:column;align-items:center;font-weight:700;line-height:1;color:var(--s)}
+.idx b{font-size:22px}
+.idx span{font-size:16px;margin-top:2px}
+.idx.tl{left:13px;top:13px}
+.idx.br{right:13px;bottom:13px;transform:rotate(180deg)}
+
+
+/* shared section bits */
+.wrap{position:relative;width:1184px;margin:0 auto}
+.h-sec{font-weight:400;font-size:40px;line-height:1;letter-spacing:-.01em}
+.sub{font-family:Inter,sans-serif;font-size:16px;line-height:1.35;color:#000}
+.curved{position:relative;background:var(--grey-bg);overflow:hidden}
+.curved::before{content:"";position:absolute;left:-8%;right:-8%;top:-70px;height:140px;border-radius:50%;background:#fff;z-index:2;pointer-events:none}
+.curved>*{position:relative;z-index:1}
+
+/* platform / feature cards (1025:1842) */
+.platform{height:601px;margin:96px 0}
+.platform .head{width:592px;margin:0 auto;text-align:center}
+.platform .sub{margin-top:16px}
+.platform .sub a{color:var(--blue)}
+.fcards{display:flex;gap:20px;margin-top:66px}
+.fcard{position:relative;flex:none;width:281px;height:359px;border-radius:16px;overflow:hidden;padding:16px}
+.fcard h3{position:relative;z-index:3;font-weight:500;font-size:24px;line-height:1.2}
+.fcard h3 em{font-style:normal;color:var(--orange)}
+.fcard.dark{background:#111;color:#fff}
+.fcard.dark::after{content:"";position:absolute;left:-7px;right:0;top:115px;height:339px;background:linear-gradient(176deg,rgba(0,0,0,0) 6%,#000 48%);z-index:2;pointer-events:none}
+.berry{position:absolute;display:flex;align-items:center;justify-content:center;z-index:4;pointer-events:none}
+.berry>div{flex:none;overflow:hidden}
+.berry img{width:100%;height:100%;object-fit:cover}
+.berry.bt{left:-17px;top:-29px;width:425px;height:273px}
+.berry.bt>div{width:397.3px;height:216.6px;transform:rotate(-8.53deg)}
+.berry.bb{left:-29px;top:153px;width:356px;height:422px}
+.berry.bb>div{width:281px;height:369.1px;transform:rotate(167.15deg) scaleY(-1)}
+.levels{position:absolute;left:11px;top:93px;width:256px;padding:16px;border-radius:16px;background:#272727;list-style:none;display:flex;flex-direction:column;gap:8px;z-index:1}
+.levels li{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:8px;border-bottom:1px solid #3f3f3f;font-size:16px;line-height:1.2;color:#d3d3d3}
+.levels li b{font-weight:500;font-size:18px;color:#fff}
+.fcard.light{background:#fff;box-shadow:0 0 0 1px #b9b9b9 inset;color:#000;display:flex;flex-direction:column;gap:16px}
+.fcard.light::after{content:"";position:absolute;left:-4px;top:132px;width:288px;height:256px;background:linear-gradient(182deg,rgba(255,255,255,0) 60%,#fff 98%);pointer-events:none;z-index:2}
+.steps-mini{display:flex;flex-direction:column;gap:24px;padding:0 1px}
+.steps-mini .s{width:236px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.tag{display:inline-flex;padding:4px 12px;border-radius:999px;background:#000;color:#fff;font-size:14px;line-height:1.2}
+.steps-mini p{font-size:14px;line-height:1.2;color:#6e6e6e}
+.steps-mini img{width:236px;height:80px;border-radius:16px}
+.fcard.black{background:#000;box-shadow:0 0 0 1px #b9b9b9 inset;color:#fff}
+.fcard.black::after{content:"";position:absolute;left:-4px;top:126px;width:288px;height:339px;background:linear-gradient(176deg,rgba(0,0,0,0) 6%,#000 48%);z-index:2;pointer-events:none}
+.dirs{position:relative;margin:26px 0 0 -43px;width:335px;display:flex;flex-direction:column;gap:6px;z-index:1}
+.dirs div{display:flex;gap:6px}
+.dirs div:first-child{justify-content:center}
+.dirs span{padding:12px 24px;border-radius:99px;background:#272727;font-size:14px;line-height:1.2;color:#fff;white-space:nowrap}
+.fcard.black .goat{position:absolute;left:56px;top:129px;width:303px;height:344px;z-index:3}
+.fcard.cta{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start}
+.fcard.cta .cossack{position:absolute;left:56px;top:57px;width:224px;height:295px;overflow:hidden}
+.fcard.cta .cossack img{width:224px;height:304.4px}
+.fcard.cta::after{top:201px}
+.fcard.cta .btn{position:relative;z-index:3;align-self:center}
+
+/* community (frame 1012:605) */
+.community{height:967px}
+.bg-el{position:absolute;left:50%;top:50px;width:982px;height:982px;margin-left:-491px;z-index:0;pointer-events:none}
+.bg-el img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transform:scale(.96);transition:opacity .45s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.community[data-active="1"] .bg-el img.f1,.community[data-active="2"] .bg-el img.f2,.community[data-active="3"] .bg-el img.f3{opacity:1;transform:none}
+.community .head{position:absolute;left:50%;top:196px;width:585px;margin-left:-292px;text-align:center;z-index:1}
+.community .sub{margin-top:16px}
+.rows{position:absolute;left:50%;top:368px;width:782px;margin-left:-391px;display:flex;flex-direction:column;gap:12px;z-index:1}
+.row{position:relative;display:flex;gap:16px;align-items:flex-start;min-height:116px;padding:8px;border-radius:16px;background:var(--rb);color:#000;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.badge:hover .row,.row:focus-visible{transform:translateY(-8px);outline:none}
+.row .txt{padding-top:14px}
+.row img{flex:0 0 100px;width:100px;height:100px;border-radius:8px}
+.row h3{font-weight:500;font-size:24px;line-height:1.2}
+.row p{margin-top:6px;width:490px;font-family:Inter,sans-serif;font-size:14px;line-height:1.34}
+.more{position:absolute;left:50%;top:742px;transform:translateX(-50%);font-size:14px;line-height:1.4;z-index:1}
+
+/* mentor search (1012:762) */
+.search{height:1136px;margin-top:96px}
+.search .head{width:590px;margin:0 auto;text-align:center}
+.search .sub{margin-top:16px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px}
+.tags button{display:inline-flex;align-items:center;gap:12px;height:48px;padding:0 20px 0 16px;border:0;border-radius:12px;background:#f7f4ff;font:500 14px "Inter Tight",sans-serif;color:#1c1530;cursor:pointer;transition:background .15s,color .15s}
+.tags button svg{width:24px;height:24px;margin:0;fill:#312740}
+.tags button:hover{background:#ece6ff}
+.tags button.on{background:#000;color:#fff}
+.tags button.on svg{fill:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,281px);gap:20px;margin-top:48px}
+.grid{align-items:stretch}
+.mcard{display:flex;flex-direction:column;gap:12px;padding:8px;background:var(--grey-bg);border-radius:24px}
+.mcard .media{display:flex;flex-direction:column;align-items:center}
+.mcard .ph{position:relative;width:100%;height:291px;margin-bottom:-12px;border-radius:23.563px;overflow:hidden;background:#d9d9d9}
+.mcard .ph img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover}
+.mcard .chip{position:relative;z-index:1;display:inline-flex;padding:8px 12px;border:0;border-radius:9999px;background:var(--green);filter:drop-shadow(0 1.859px 0 #ade04e);font:600 14px/normal "Inter Tight",sans-serif;color:#000;text-align:center;white-space:nowrap;cursor:pointer;transition:transform .15s}
+.mcard .chip:hover{transform:translateY(-1px)}
+.mcard .chip:active{transform:translateY(1px);filter:drop-shadow(0 0 0 #ade04e)}
+.mcard .mt{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;color:#3b3b3b}
+.mcard h4{font-weight:500;font-size:20px;line-height:1.2}
+.mcard p{font-weight:500;font-size:14px;line-height:1.4;white-space:pre-wrap}
+.mcard.join .mt p{font-family:Inter,sans-serif;line-height:1.3;padding-top:12px}
+
+/* process (1012:851) */
+.process{height:867px;margin-top:96px}
+.process .top{display:flex;justify-content:space-between;padding-top:196px}
+.process h2{width:552px;line-height:1.2;color:#0b0d10}
+.process .intro{width:544px;font-family:Inter,sans-serif;font-size:16px;line-height:1.38;color:#303236;margin-top:2px}
+.steps{display:flex;gap:20px;margin-top:92px}
+.step{position:relative;width:281px;height:363px;background:#fff;border-radius:16px;overflow:hidden;padding:12px}
+.step .tag{position:relative;z-index:3}
+.step .vis{position:absolute;left:12px;top:37px;width:257px;height:226px;clip-path:inset(0 -24px 0 -24px)}
+.step .vis img{position:absolute;max-width:none}
+.step .fade{position:absolute;left:0;right:0;top:57px;height:306px;background:linear-gradient(180deg,rgba(255,255,255,0) 0,#fff 58%);z-index:2;pointer-events:none}
+.step .tx{position:absolute;left:12px;bottom:12px;width:251px;z-index:3}
+.step h3{font-weight:500;font-size:24px;line-height:1.2;color:#000}
+.step p{margin-top:8px;font-family:Inter,sans-serif;font-size:14px;line-height:1.2;color:#6e6e6e}
+.step .call{position:absolute;left:90px;top:225px;z-index:4;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;background:#4ba3ea;color:#fff;font-family:Inter,sans-serif;font-weight:500;font-size:12px}
+.step .call i{width:12px;height:12px;border-radius:2px;background:#fff;clip-path:polygon(20% 10%,95% 50%,20% 90%)}
+
+/* footer (same as main page) */
+.footwrap{background:var(--grey-bg);padding:64px 10px 10px}
+.footer{margin:0;background:var(--dark);border-radius:24px;color:var(--dark-text)}
+.footer .stage{height:707px;width:1420px}
+.f-label{left:118px;top:48px;font-size:16px;line-height:1.4;font-weight:500;color:#dbe8fb}
+.f-handle{left:118px;top:70px;font-weight:500;font-size:36px;line-height:1.1;color:#dbe8fb}
+.socials{left:118px;top:139px;display:flex;gap:20px}
+.socials a{width:281px;height:280px;background:#140018;border:1px solid #32233A;border-radius:16px;display:grid;place-items:center;transition:background .2s}
+.socials a:hover{background:#21102a}
+.socials img{width:80px;height:80px;display:block}
+.socials a:nth-child(3) img{transform:scale(1.35)}
+.f-giant{left:118px;top:462px;width:1184px;font-weight:500;font-size:141px;letter-spacing:-3.2px;line-height:78.8px;color:#dbe8fb;white-space:nowrap}
+.f-bar{left:118px;top:626px;width:1184px;padding-top:12px;border-top:1px solid rgba(219,232,251,.12);display:flex;justify-content:space-between;font-size:14px;line-height:1.4;color:rgba(219,232,251,.55)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* mentor pop-up (1030:1452) */
+body.pop-open{overflow:hidden}
+.pop-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.25);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.pop-overlay.open{opacity:1;visibility:visible}
+.pop{pointer-events:none;position:fixed;left:0;right:0;bottom:0;z-index:101;display:flex;flex-direction:column;align-items:flex-end;gap:16px;visibility:hidden;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1),visibility 0s .5s}
+.pop.open{visibility:visible;transform:none;transition:transform .5s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.pop-x{pointer-events:auto;margin-right:max(16px,calc((100vw - 1184px)/2));display:grid;place-items:center;width:48px;height:48px;border:0;border-radius:100px;background:#fff;cursor:pointer;transition:transform .15s}
+.pop-x:hover{transform:scale(1.06)}
+.pop-x img{width:32px;height:32px}
+.sheet{pointer-events:auto;scrollbar-width:none;-ms-overflow-style:none;position:relative;width:100%;max-height:calc(100vh - 80px);overflow-y:auto;background:#fff;border-radius:32px 32px 0 0;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:32px;overscroll-behavior:contain}
+.grab{flex:none;width:56px;height:5px;border-radius:3px;background:#a4a3a6;cursor:grab}
+.sheet-in{width:782px;display:flex;flex-direction:column;gap:64px;padding-bottom:132px}
+.p-head{display:flex;flex-direction:column;align-items:center;gap:16px}
+.p-photo{width:200px;height:200px;border-radius:28px;object-fit:cover}
+.p-id{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;text-align:center}
+.p-id h2{font-weight:400;font-size:40px;line-height:1;color:#000}
+.p-id p{white-space:pre-line;font-weight:500;font-size:16px;line-height:1.4;color:#3b3b3b}
+.p-soc{display:flex;gap:12px}
+.p-soc a{display:grid;place-items:center;width:48px;height:48px;border-radius:36px;background:#f9f5fe;transition:background .15s}
+.p-soc a:hover{background:#efe6fd}
+.p-soc a{color:#312740}.p-soc svg{width:30px;height:30px;fill:currentColor}
+.p-panel[hidden]{display:none}
+.p-aboutm{display:flex;flex-direction:column;gap:48px}.p-aboutm h3,.p-rh{font-weight:500;font-size:36px;line-height:1;color:#000;margin-bottom:16px}.p-aboutm p,.p-aboutm li{font-weight:500;font-size:20px;line-height:1.2;color:#3b3b3b}.p-aboutm ul{padding-left:24px;display:flex;flex-direction:column;gap:10px}
+.p-revs{display:grid;grid-template-columns:1fr 1fr;gap:20px}.rev{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:16px;background:#f2f6f6}.rev header{display:flex;align-items:center;gap:8px}.rev i{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:14px;color:#000}.rev b{font-weight:500;font-size:18px}.rev header span{font-weight:500;font-size:14px;color:#6e6e6e;margin-left:auto}.rev p{font-weight:500;font-size:16px;line-height:1.3;color:#3b3b3b}.rev a{font-weight:500;font-size:14px;color:#315eff}
+.p-about{display:flex;flex-direction:column;gap:24px;font-weight:500;font-size:20px;line-height:normal;color:#303236}
+.p-tabs{display:flex;gap:8px;justify-content:center}
+.p-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:16px;height:48px;padding:0 16px;border:0;border-radius:16px;background:#f9f5fe;font:500 14px/21.7px "Inter Tight",sans-serif;color:#312740;cursor:pointer;transition:background .15s}
+.p-tabs button:hover{background:#efe6fd}
+.p-tabs button img{width:24px;height:24px}
+.p-tabs button{color:#312740}.p-tabs button svg{width:24px;height:24px;fill:currentColor;flex:none}
+.p-tabs .i-on{display:none}
+.p-tabs button.on{background:#000;color:#fff}
+.p-tabs button.on .i-on{display:block}
+.p-tabs button.on .i-off{display:none}
+.p-svcs{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.svc{display:flex;flex-direction:column;justify-content:space-between;gap:32px;min-height:366px;padding:12px;border-radius:16px;background:#f2f6f6}
+.svc-h{display:flex;flex-direction:column;gap:8px;color:#000}
+.svc-t{font-weight:500;font-size:18px;line-height:1.2}
+.svc-p{font-weight:500;font-size:24px;line-height:1.2}
+.svc ul{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:-4px;font-weight:500;font-size:14px;line-height:1.2;color:#6e6e6e}
+.svc .btn{margin-top:auto;width:100%;height:auto;padding:14px 24px}
+.p-cta{position:sticky;bottom:0;width:100%;display:flex;justify-content:center;padding:56px 0 24px;margin-top:-100px;background:linear-gradient(to top,#fff 68%,rgba(255,255,255,0))}
+.p-cta .btn{height:auto;padding:14px 24px}
+@media (prefers-reduced-motion:reduce){.pop,.pop-overlay{transition:none!important}}
+
+.sheet::-webkit-scrollbar{display:none;width:0;height:0}
+
+.pcard img{display:block;width:100%;height:100%;user-select:none}
+
+/* === Figma text styles / geometry sync (Mentors 1216:1869) === */
+.hero-copy h1{width:622px;font-weight:500;font-size:56px;line-height:56px;letter-spacing:0;color:#312740}
+.hero-copy p{font-size:18px;line-height:24px;color:#312740;white-space:nowrap}
+.pill{font-weight:500;line-height:22px}
+.h-sec{font-weight:500;font-size:40px;line-height:40px;letter-spacing:0}
+.sub{font-weight:500;font-size:16px;line-height:22px}
+.platform .sub{font-family:"Inter Tight",sans-serif}
+.search .sub{width:442px;margin-left:auto;margin-right:auto}
+.platform{height:579px}
+.fcard h3{line-height:29px}
+.levels li{line-height:22px}
+.levels li b{line-height:23px}
+.tag{line-height:20px;font-weight:500}
+.steps-mini p{font-weight:500;line-height:20px}
+.community{height:924px}
+.rows{top:356px}
+.row h3{line-height:29px}
+.row p{font-weight:500;line-height:19px}
+.search{height:1152px}
+.process{height:847px}
+.process h2{line-height:48px;color:#0b0d10}
+.process .intro{font-family:"Inter Tight",sans-serif;font-weight:500;font-size:18px;line-height:23px;color:#363636;margin-top:0}
+.steps{margin-top:64px}
+.step h3{line-height:29px}
+.step p{font-family:"Inter Tight",sans-serif;font-weight:500;line-height:20px}
+.step .call{font-family:"Inter Tight",sans-serif;font-weight:400;font-size:10px;line-height:14px}
+.footer .stage{height:694px}
+.step .vis{left:0;top:0;width:281px;height:363px;clip-path:none}
+.step .fade{background:linear-gradient(180deg,rgba(255,255,255,0) 27%,#fff 68%)}
+.step:first-child .fade{top:103px;left:-5px;width:288px;height:256px;background:linear-gradient(180deg,rgba(255,255,255,0) 59%,#fff 100%)}
+.step:nth-child(2) .fade{left:4px;width:277px;right:auto}
+.platform .head{width:736px}
+.platform .sub{width:626px;margin-left:auto;margin-right:auto}
+/* chips + mentor cards (Figma Chip 1216:2126, Mentor Card 1217:1471) */
+.tags button{gap:16px;padding:0 16px;border-radius:16px;background:#f9f5fe;color:#000}
+.tags button svg{width:24px;height:24px;margin:0;fill:#312740}
+.tags button:hover{background:#efe7fb}
+.tags button.on{background:#000;color:#fff}
+.mcard .media{position:relative;height:315px;align-items:stretch}
+.mcard .ph{height:291px;margin-bottom:0}
+.mcard .chip{position:absolute;left:50%;top:279px;transform:translateX(-50%);white-space:nowrap;line-height:20px}
+.mcard .chip:hover{transform:translateX(-50%) translateY(-1px)}
+.mcard .chip:active{transform:translateX(-50%) translateY(1px)}
+.mcard .mt{gap:8px;color:#363636}
+.mcard p{line-height:20px}
+.mcard.join .mt p{padding-top:0;font-family:"Inter Tight",sans-serif;line-height:20px}
+</style>
+</head>
+<body>
+
+<!-- duotone "printed ink" look for the mentor photos: posterize → navy ink on warm paper -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="ink" color-interpolation-filters="sRGB">
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer>
+      <feFuncR type="discrete" tableValues="0 .35 .62 .85 1"/>
+      <feFuncG type="discrete" tableValues="0 .35 .62 .85 1"/>
+      <feFuncB type="discrete" tableValues="0 .35 .62 .85 1"/>
+    </feComponentTransfer>
+    <feComponentTransfer>
+      <feFuncR type="table" tableValues=".13 .98"/>
+      <feFuncG type="table" tableValues=".12 .95"/>
+      <feFuncB type="table" tableValues=".28 .88"/>
+    </feComponentTransfer>
+  </filter>
+</svg>
+
+<header class="header"><div class="stage" style="height:72px">
+  <a href="index.html"><img class="abs logo" src="assets/fig/logo-pdc.svg" alt="Product Design Club"></a>
+  <nav class="abs nav"><a href="index.html">Головна</a><a href="#">Події</a><a href="mentors.html" aria-current="page">Ментори</a><a href="#">База знань</a><a href="#">Соцпроєкти</a></nav>
+  <a class="abs btn btn-green" href="#">Підписатись</a>
+</div></header>
+
+<section class="hero">
+  <img class="sky" src="assets/hata/sky.png" alt="">
+  <div class="hero-stage">
+    <div class="deck" aria-label="Ментори клубу"></div>
+    <div class="hero-copy">
+      <div class="t">
+        <span class="pill">Beta 1.0</span>
+        <h1>Дизайн Хата менторська платформа</h1>
+        <p>Коли потрібна підтримка діючого, затребуваного спеціаліста</p>
+      </div>
+      <a class="btn btn-dark" href="#search">Знайти ментора</a>
+    </div>
+  </div>
+  <img class="village" src="assets/hata/fg-a.png" alt="">
+</section>
+
+<section class="platform"><div class="wrap">
+  <div class="head">
+    <h2 class="h-sec">Платформа, де просто й безпечно знайти свого ментора</h2>
+    <p class="sub">На нашій платформі ви можете обрати <a href="#search">ментора</a> за досвідом, відгуками та напрямом, порівняти ціни й почати підкорювати нові вершини вже сьогодні.</p>
+  </div>
+  <div class="fcards">
+    <article class="fcard dark">
+      <h3>Висока кваліфікація<br>менторів</h3>
+      <ul class="levels"><li>Lead<b>4</b></li><li>Principal<b>4</b></li><li>Senior<b>4</b></li><li>Middle<b>4</b></li></ul>
+      <div class="berry bt"><div><img src="assets/hata2/berries.png" alt=""></div></div>
+      <div class="berry bb"><div><img src="assets/hata2/berries.png" alt=""></div></div>
+    </article>
+    <article class="fcard light">
+      <h3>Прозорі <em>умови</em> для кожного</h3>
+      <div class="steps-mini">
+        <div class="s"><span class="tag">Крок 1</span><p>Почни з пошуку напряму, у якому хочеш розвиватись</p></div>
+        <div class="s"><span class="tag">Крок 2</span><p>Ознайомся з карткою ментора, форматом співпраці та ціною</p></div>
+        <img src="assets/hata2/faces.png" alt="">
+      </div>
+    </article>
+    <article class="fcard black">
+      <h3>Усі доступні напрями</h3>
+      <div class="dirs"><div><span>Graphic Design</span><span>UI/UX Design</span></div><div><span>Design Engineering</span><span>Product Design</span></div></div>
+      <img class="goat" src="assets/hata2/goat.png" alt="">
+    </article>
+    <article class="fcard black cta">
+      <div class="cossack"><img src="assets/hata2/cossack.png" alt=""></div>
+      <h3>Готові стати профі в дизайні?</h3>
+      <a class="btn btn-orange" href="#search">Стартувати</a>
+    </article>
+  </div>
+</div></section>
+
+<!-- community -->
+<section class="community curved"><div class="wrap" style="height:100%">
+  <div class="bg-el" aria-hidden="true">
+    <img class="f1" src="assets/hata/flake-1.svg" alt="">
+    <img class="f2" src="assets/hata/flake-2.svg" alt="">
+    <img class="f3" src="assets/hata/flake-3.svg" alt="">
+  </div>
+  <div class="head">
+    <h2 class="h-sec">Підійде до будь-якого рівня</h2>
+    </div>
+  <div class="rows">
+    <div class="badge" data-i="1"><a class="row" href="#" data-i="1" style="--rb:#fdc3fe;--rs:#f047f3"><img src="assets/hata2/tile-1.svg" alt=""><div class="txt"><h3>Початківцям</h3><p>Розберемось із першими кроками: портфоліо, перші відгуки на вакансії, питання без осуду.</p></div></a></div>
+    <div class="badge" data-i="2"><a class="row" href="#" data-i="2" style="--rb:#e6e2fd;--rs:#7e51ff"><img src="assets/hata2/tile-2.svg" alt=""><div class="txt"><h3>Мідлам</h3><p>Обмінюйтесь досвідом, знаходьте менторів і співрозмовників, які вже пройшли ваші складнощі.</p></div></a></div>
+    <div class="badge" data-i="3"><a class="row" href="#" data-i="3" style="--rb:#ffe39b;--rs:#ffc31d"><img src="assets/hata2/tile-3.svg" alt=""><div class="txt"><h3>Сеньйорам</h3><p>Діліться експертизою, менторте інших і тримайте руку на пульсі ринку разом із колегами.</p></div></a></div>
+</div></section>
+
+
+<section class="search" id="search"><div class="wrap">
+  <div class="head">
+    <h2 class="h-sec">Пошук менторів</h2>
+    <p class="sub">Обери ментора за напрямом і досвідом: у кожного своя спеціалізація й формат роботи.</p>
+  </div>
+  <div class="tags" role="tablist">
+    <button class="on" role="tab"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M3 6C3 4.34315 4.34315 3 6 3H8.25C9.90685 3 11.25 4.34315 11.25 6V8.25C11.25 9.90685 9.90685 11.25 8.25 11.25H6C4.34315 11.25 3 9.90685 3 8.25V6ZM12.75 6C12.75 4.34315 14.0931 3 15.75 3H18C19.6569 3 21 4.34315 21 6V8.25C21 9.90685 19.6569 11.25 18 11.25H15.75C14.0931 11.25 12.75 9.90685 12.75 8.25V6ZM3 15.75C3 14.0931 4.34315 12.75 6 12.75H8.25C9.90685 12.75 11.25 14.0931 11.25 15.75V18C11.25 19.6569 9.90685 21 8.25 21H6C4.34315 21 3 19.6569 3 18V15.75ZM12.75 15.75C12.75 14.0931 14.0931 12.75 15.75 12.75H18C19.6569 12.75 21 14.0931 21 15.75V18C21 19.6569 19.6569 21 18 21H15.75C14.0931 21 12.75 19.6569 12.75 18V15.75Z"/></svg>Усе</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9 4.5C9.33486 4.5 9.62915 4.72198 9.72114 5.04396L10.5343 7.89015C10.8903 9.13593 11.8641 10.1097 13.1099 10.4657L15.956 11.2789C16.278 11.3709 16.5 11.6651 16.5 12C16.5 12.3349 16.278 12.6291 15.956 12.7211L13.1098 13.5343C11.8641 13.8903 10.8903 14.8641 10.5343 16.1099L9.72114 18.956C9.62915 19.278 9.33486 19.5 9 19.5C8.66514 19.5 8.37085 19.278 8.27886 18.956L7.46566 16.1099C7.10972 14.8641 6.13593 13.8903 4.89015 13.5343L2.04396 12.7211C1.72198 12.6291 1.5 12.3349 1.5 12C1.5 11.6651 1.72198 11.3709 2.04396 11.2789L4.89015 10.4657C6.13593 10.1097 7.10972 9.13593 7.46566 7.89015L8.27886 5.04396C8.37085 4.72198 8.66514 4.5 9 4.5Z"/><path fill-rule="evenodd" d="M18 1.5C18.3442 1.5 18.6441 1.73422 18.7276 2.0681L18.9865 3.10356C19.2216 4.04406 19.9559 4.7784 20.8964 5.01353L21.9319 5.27239C22.2658 5.35586 22.5 5.65585 22.5 6C22.5 6.34415 22.2658 6.64414 21.9319 6.72761L20.8964 6.98647C19.9559 7.2216 19.2216 7.95594 18.9865 8.89644L18.7276 9.9319C18.6441 10.2658 18.3442 10.5 18 10.5C17.6558 10.5 17.3559 10.2658 17.2724 9.9319L17.0135 8.89644C16.7784 7.95594 16.0441 7.2216 15.1036 6.98647L14.0681 6.72761C13.7342 6.64414 13.5 6.34415 13.5 6C13.5 5.65585 13.7342 5.35586 14.0681 5.27239L15.1036 5.01353C16.0441 4.7784 16.7784 4.04406 17.0135 3.10356L17.2724 2.0681C17.3559 1.73422 17.6558 1.5 18 1.5Z"/><path fill-rule="evenodd" d="M16.5 15C16.8228 15 17.1094 15.2066 17.2115 15.5128L17.6058 16.6956C17.7551 17.1435 18.1065 17.4949 18.5544 17.6442L19.7372 18.0385C20.0434 18.1406 20.25 18.4272 20.25 18.75C20.25 19.0728 20.0434 19.3594 19.7372 19.4615L18.5544 19.8558C18.1065 20.0051 17.7551 20.3565 17.6058 20.8044L17.2115 21.9872C17.1094 22.2934 16.8228 22.5 16.5 22.5C16.1772 22.5 15.8906 22.2934 15.7885 21.9872L15.3942 20.8044C15.2449 20.3565 14.8935 20.0051 14.4456 19.8558L13.2628 19.4615C12.9566 19.3594 12.75 19.0728 12.75 18.75C12.75 18.4272 12.9566 18.1406 13.2628 18.0385L14.4456 17.6442C14.8935 17.4949 15.2449 17.1435 15.3942 16.6956L15.7885 15.5128C15.8906 15.2066 16.1772 15 16.5 15Z"/></svg>Робота з ШІ</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"/><path fill-rule="evenodd" d="M1.32341 11.4467C2.81066 6.97571 7.02791 3.75 12.0005 3.75C16.9708 3.75 21.1864 6.97271 22.6755 11.4405C22.7959 11.8015 22.796 12.1922 22.6759 12.5533C21.1886 17.0243 16.9714 20.25 11.9988 20.25C7.02847 20.25 2.81284 17.0273 1.32374 12.5595C1.2034 12.1985 1.20328 11.8078 1.32341 11.4467ZM17.25 12C17.25 14.8995 14.8995 17.25 12 17.25C9.1005 17.25 6.75 14.8995 6.75 12C6.75 9.1005 9.1005 6.75 12 6.75C14.8995 6.75 17.25 9.1005 17.25 12Z"/></svg>Візуальний дизайн</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10.5 3.75C6.77208 3.75 3.75 6.77208 3.75 10.5C3.75 14.2279 6.77208 17.25 10.5 17.25C12.3642 17.25 14.0506 16.4953 15.273 15.273C16.4953 14.0506 17.25 12.3642 17.25 10.5C17.25 6.77208 14.2279 3.75 10.5 3.75ZM2.25 10.5C2.25 5.94365 5.94365 2.25 10.5 2.25C15.0563 2.25 18.75 5.94365 18.75 10.5C18.75 12.5078 18.032 14.3491 16.8399 15.7793L21.5303 20.4697C21.8232 20.7626 21.8232 21.2374 21.5303 21.5303C21.2374 21.8232 20.7626 21.8232 20.4697 21.5303L15.7793 16.8399C14.3491 18.032 12.5078 18.75 10.5 18.75C5.94365 18.75 2.25 15.0563 2.25 10.5Z"/></svg>UX-дослідження</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7.5 5.25C7.5 3.59315 8.84315 2.25 10.5 2.25H13.5C15.1569 2.25 16.5 3.59315 16.5 5.25V5.45498C17.4325 5.54034 18.3574 5.65196 19.274 5.78912C20.7281 6.00668 21.75 7.27163 21.75 8.70569V11.7389C21.75 12.95 21.0164 14.0913 19.8137 14.4911C17.3566 15.308 14.7292 15.75 12 15.75C9.27087 15.75 6.64342 15.308 4.18627 14.4911C2.98364 14.0912 2.25 12.95 2.25 11.7389V8.70569C2.25 7.27163 3.27191 6.00668 4.72596 5.78912C5.6426 5.65196 6.56753 5.54034 7.5 5.45498V5.25ZM15 5.25V5.34082C14.0077 5.28056 13.0074 5.25 12 5.25C10.9927 5.25 9.99235 5.28056 9 5.34082V5.25C9 4.42157 9.67157 3.75 10.5 3.75H13.5C14.3284 3.75 15 4.42157 15 5.25ZM12 13.5C12.4142 13.5 12.75 13.1642 12.75 12.75C12.75 12.3358 12.4142 12 12 12C11.5858 12 11.25 12.3358 11.25 12.75C11.25 13.1642 11.5858 13.5 12 13.5Z"/><path d="M3 18.4V15.6039C3.22304 15.7263 3.46097 15.8307 3.71303 15.9145C6.32087 16.7815 9.10801 17.25 12 17.25C14.892 17.25 17.6791 16.7815 20.287 15.9145C20.539 15.8307 20.777 15.7263 21 15.604V18.4C21 19.8519 19.9528 21.1275 18.4769 21.3234C16.3575 21.6048 14.1955 21.75 12 21.75C9.80447 21.75 7.64246 21.6048 5.52314 21.3234C4.04724 21.1275 3 19.8519 3 18.4Z"/></svg>Розбір портфоліо й CV</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path d="M5.25 6.375C5.25 4.09683 7.09683 2.25 9.375 2.25C11.6532 2.25 13.5 4.09683 13.5 6.375C13.5 8.65317 11.6532 10.5 9.375 10.5C7.09683 10.5 5.25 8.65317 5.25 6.375Z"/><path d="M2.25 19.125C2.25 15.19 5.43997 12 9.375 12C13.31 12 16.5 15.19 16.5 19.125V19.1276C16.5 19.1674 16.4996 19.2074 16.499 19.2469C16.4946 19.5054 16.3574 19.7435 16.1359 19.8768C14.1607 21.0661 11.8466 21.75 9.375 21.75C6.90343 21.75 4.5893 21.0661 2.61406 19.8768C2.39256 19.7435 2.25537 19.5054 2.25103 19.2469C2.25034 19.2064 2.25 19.1657 2.25 19.125Z"/><path d="M18.75 7.5C18.75 7.08579 18.4142 6.75 18 6.75C17.5858 6.75 17.25 7.08579 17.25 7.5V9.75H15C14.5858 9.75 14.25 10.0858 14.25 10.5C14.25 10.9142 14.5858 11.25 15 11.25H17.25V13.5C17.25 13.9142 17.5858 14.25 18 14.25C18.4142 14.25 18.75 13.9142 18.75 13.5V11.25H21C21.4142 11.25 21.75 10.9142 21.75 10.5C21.75 10.0858 21.4142 9.75 21 9.75H18.75V7.5Z"/></svg>Допомога з наймом</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path d="M6 3C4.34315 3 3 4.34315 3 6V7.5C3 7.91421 3.33579 8.25 3.75 8.25C4.16421 8.25 4.5 7.91421 4.5 7.5V6C4.5 5.17157 5.17157 4.5 6 4.5H7.5C7.91421 4.5 8.25 4.16421 8.25 3.75C8.25 3.33579 7.91421 3 7.5 3H6Z"/><path d="M16.5 3C16.0858 3 15.75 3.33579 15.75 3.75C15.75 4.16421 16.0858 4.5 16.5 4.5H18C18.8284 4.5 19.5 5.17157 19.5 6V7.5C19.5 7.91421 19.8358 8.25 20.25 8.25C20.6642 8.25 21 7.91421 21 7.5V6C21 4.34315 19.6569 3 18 3H16.5Z"/><path d="M12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25Z"/><path d="M4.5 16.5C4.5 16.0858 4.16421 15.75 3.75 15.75C3.33579 15.75 3 16.0858 3 16.5V18C3 19.6569 4.34315 21 6 21H7.5C7.91421 21 8.25 20.6642 8.25 20.25C8.25 19.8358 7.91421 19.5 7.5 19.5H6C5.17157 19.5 4.5 18.8284 4.5 18V16.5Z"/><path d="M21 16.5C21 16.0858 20.6642 15.75 20.25 15.75C19.8358 15.75 19.5 16.0858 19.5 16.5V18C19.5 18.8284 18.8284 19.5 18 19.5H16.5C16.0858 19.5 15.75 19.8358 15.75 20.25C15.75 20.6642 16.0858 21 16.5 21H18C19.6569 21 21 19.6569 21 18V16.5Z"/></svg>Нішування в професії</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M20.5986 1.5C20.2232 1.5 19.8562 1.61111 19.5439 1.81934L14.4649 5.20533C13.1853 6.05835 12.0203 7.0624 10.993 8.19218C13.1064 9.18391 14.8161 10.8935 15.8078 13.007C16.9376 11.9797 17.9416 10.8146 18.7946 9.53508L22.1806 4.45609C22.3888 4.14375 22.5 3.77677 22.5 3.40139C22.5 2.35128 21.6487 1.5 20.5986 1.5ZM12.2995 15.5249C12.9568 15.1597 13.5898 14.7563 14.1954 14.3175C13.3836 12.258 11.742 10.6164 9.68246 9.80456C9.24361 10.4102 8.84023 11.0432 8.47506 11.7005L8.19653 12.2018C9.93302 12.6985 11.3015 14.0669 11.7981 15.8034L12.2995 15.5249ZM6.74995 13.5C4.67886 13.5 2.99995 15.1789 2.99995 17.25C2.99995 18.0784 2.32839 18.75 1.49995 18.75C1.46599 18.75 1.43219 18.7489 1.3986 18.7466C1.12245 18.7284 0.858681 18.8637 0.712418 19.0986C0.566154 19.3336 0.561166 19.63 0.699441 19.8697C1.60524 21.4402 3.30337 22.5 5.24995 22.5C8.14946 22.5 10.5 20.1495 10.5 17.25C10.5 15.1789 8.82104 13.5 6.74995 13.5Z"/></svg>Графічний дизайн</button>
+    <button role="tab"><svg viewBox="0 0 24 24"><path d="M12.3779 1.60217C12.1444 1.46594 11.8556 1.46594 11.6221 1.60217L3 6.63172L12 11.8817L21 6.63172L12.3779 1.60217Z"/><path d="M21.75 7.93078L12.75 13.1808V22.1808L21.3779 17.1478C21.6083 17.0134 21.75 16.7668 21.75 16.5V7.93078Z"/><path d="M11.25 22.1808V13.1808L2.25 7.93078V16.5C2.25 16.7668 2.39168 17.0134 2.6221 17.1478L11.25 22.1808Z"/></svg>Продуктовий дизайн</button>
+  </div>
+  <div class="grid">
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m1.jpg" alt="Юрій Черній"></div><button class="chip" type="button" data-mentor="0">Дізнатись про ментора</button></div><div class="mt"><h4>Юрій Черній</h4><p>AI Native Product Designer<br>3 роки досвіду</p></div></article>
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m2.jpg" alt="Данило Чупров"></div><button class="chip" type="button" data-mentor="1">Дізнатись про ментора</button></div><div class="mt"><h4>Данило Чупров</h4><p>Product Designer &nbsp;·&nbsp; 4 роки досвіду</p></div></article>
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m3.jpg" alt="Анна Большедворська"></div><button class="chip" type="button" data-mentor="2">Дізнатись про ментора</button></div><div class="mt"><h4>Анна Большедворська</h4><p>Sr. Product Designer &nbsp;·&nbsp; 8 років досвіду<br>ментор</p></div></article>
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m4.jpg" alt="Ніна Войтович"></div><button class="chip" type="button" data-mentor="3">Дізнатись про ментора</button></div><div class="mt"><h4>Ніна Войтович</h4><p>Product Designer &nbsp;·&nbsp; 3 роки досвіду<br>ментор &nbsp;·&nbsp; засновниця</p></div></article>
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m5.jpg" alt="Юлія Корж"></div><button class="chip" type="button" data-mentor="4">Дізнатись про ментора</button></div><div class="mt"><h4>Юлія Корж</h4><p>Sr. UI/UX Designer, Product Analyst<br>9 років досвіду</p></div></article>
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m6.jpg" alt="Євген Тонєв"></div><button class="chip" type="button" data-mentor="5">Дізнатись про ментора</button></div><div class="mt"><h4>Євген Тонєв</h4><p>Principal Product Designer &nbsp;·&nbsp; 18 років досвіду</p></div></article>
+    <article class="mcard"><div class="media"><div class="ph"><img src="assets/hata2/m7.jpg" alt="Ірина Пефтій"></div><button class="chip" type="button" data-mentor="6">Дізнатись про ментора</button></div><div class="mt"><h4>Ірина Пефтій</h4><p>Product Designer &nbsp;·&nbsp; 5 років досвіду</p></div></article>
+    <article class="mcard join"><div class="media"><div class="ph"><img src="assets/hata2/m8.jpg" alt="Стати ментором"></div><a class="chip" href="#">Стати ментором</a></div><div class="mt"><p>Маєте актуальні знання? Долучайтесь до грона менторів, зв’яжіться з нами.</p></div></article>
+  </div>
+</div></section>
+
+<section class="process curved"><div class="wrap">
+  <div class="top">
+    <h2 class="h-sec">Як виглядає процес співпраці?</h2>
+    <p class="intro">Від пошуку до першої розмови з ментором: чотири кроки. Обираєш напрям, дивишся, хто тобі підходить, формулюєш запит і пишеш напряму.</p>
+  </div>
+  <div class="steps">
+    <article class="step"><span class="tag">Крок 1</span><div class="vis"><img src="assets/hata2/vis-1.png" alt="" style="left:0px;top:40px;width:281px;height:234px"></div><div class="fade"></div><div class="tx"><h3>Почни з пошуку</h3><p>Обери напрям або тему. Ми покажемо підходящих менторів.</p></div></article>
+    <article class="step"><span class="tag">Крок 2</span><div class="vis"><img src="assets/hata2/vis-2.png" alt="" style="left:12px;top:40px;width:247px;height:303px"></div><div class="fade"></div><div class="tx"><h3>Досліди ментора</h3><p>Ознайомся з профілем ментора: описом, форматом співпраці, умовами та ключовими перевагами.</p></div></article>
+    <article class="step"><span class="tag">Крок 3</span><div class="vis"><img src="assets/hata2/vis-3.png" alt="" style="left:12px;top:40px;width:257px;height:214px"></div><div class="fade"></div><div class="tx"><h3>Сформулюй запит</h3><p>Сформулюй мету заздалегідь, так ментору легше допомогти. Чіткий запит дає швидший результат.</p></div></article>
+    <article class="step"><span class="tag">Крок 4</span><div class="vis"><img src="assets/hata2/vis-4.png" alt="" style="left:0px;top:40px;width:281px;height:288px"></div><div class="fade"></div><a class="call" href="#"><i></i>Зв’язатись</a><div class="tx"><h3>Почни співпрацю</h3><p>Зв’яжися з ментором, розкажи про свої цілі й починай рости разом.</p></div></article>
+  </div>
+</div></section>
+
+<div class="footwrap">
+<footer class="footer"><div class="stage">
+  <p class="abs f-label">Засновниця спільноти</p>
+  <a class="abs f-handle" href="#">@NINADesign_n</a>
+  <div class="abs socials">
+    <a href="#" aria-label="Telegram"><img src="assets/fig/social-telegram.svg" alt=""></a>
+    <a href="#" aria-label="Instagram"><img src="assets/fig/social-instagram.svg" alt=""></a>
+    <a href="#" aria-label="YouTube"><img src="assets/fig/social-youtube.svg" alt=""></a>
+    <a href="#" aria-label="LinkedIn"><img src="assets/fig/social-linkedin.svg" alt=""></a>
+  </div>
+  <div class="abs f-giant">Product Design Club</div>
+  <div class="abs f-bar"><a href="#">Політика конфіденційності</a><span>© 2026 Усі права захищено</span><span>Сайт зробив Юрій Черній</span></div>
+</div></footer>
+</div>
+
+
+<div class="pop-overlay" data-pop-close></div>
+<div class="pop" id="pop" role="dialog" aria-modal="true" aria-labelledby="pop-name" aria-hidden="true">
+  <button class="pop-x" type="button" aria-label="Закрити" data-pop-close><img src="assets/hata2/pop-close.svg" alt=""></button>
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="sheet-in">
+      <div class="p-head">
+        <img class="p-photo" id="pop-photo" src="" alt="">
+        <div class="p-id">
+          <h2 id="pop-name"></h2>
+          <p id="pop-role"></p>
+          <div class="p-soc"><a href="#" aria-label="Telegram"><svg viewBox="0 0 80 80"><path d="M10.7538 35.7005C10.7538 35.7005 40.2389 21.0658 50.4649 15.9128C54.3849 13.8515 67.6787 7.25556 67.6787 7.25556C67.6787 7.25556 73.8146 4.36979 73.303 11.378C73.1326 14.2637 71.7692 24.3638 70.4057 35.2884C68.3605 50.7476 66.1449 67.6497 66.1449 67.6497C66.1449 67.6497 65.8039 72.3906 62.9066 73.215C60.0092 74.0391 55.2371 70.3293 54.3849 69.5048C53.7032 68.8864 41.6024 59.6109 37.1711 55.0762C35.9781 53.8394 34.6146 51.3659 37.3415 48.4802C43.4771 41.6782 50.8058 33.2271 55.2371 27.8679C57.2823 25.3944 59.3275 19.623 50.8058 26.6311C38.705 36.7312 26.7746 46.2129 26.7746 46.2129C26.7746 46.2129 24.0477 48.2741 18.9347 46.419C13.8217 44.5639 7.85646 42.0904 7.85646 42.0904C7.85646 42.0904 3.76605 38.9986 10.7538 35.7005Z" fill="currentColor"/></svg>
+</a><a href="#" aria-label="Instagram"><svg viewBox="0 0 80 80"><path d="M40.0031 6.66699C30.9502 6.66699 29.8141 6.70656 26.2586 6.86837C22.7099 7.03091 20.2876 7.59272 18.1682 8.41699C15.9758 9.26837 14.116 10.4073 12.2633 12.2608C10.4091 14.1135 9.27017 15.9732 8.41604 18.1649C7.58959 20.285 7.02712 22.7079 6.86741 26.2552C6.70835 29.8108 6.66669 30.9476 6.66669 40.0003C6.66669 49.0531 6.70698 50.1858 6.86806 53.7413C7.03125 57.2899 7.59306 59.7121 8.41669 61.8316C9.26879 64.0239 10.4077 65.8837 12.2612 67.7364C14.1133 69.5909 15.9731 70.7322 18.164 71.5837C20.2849 72.4083 22.7078 72.9699 26.2557 73.1322C29.8114 73.2938 30.9468 73.3337 39.999 73.3337C49.0526 73.3337 50.1852 73.2938 53.7408 73.1322C57.2894 72.9699 59.7144 72.4083 61.8353 71.5837C64.027 70.7322 65.884 69.5909 67.7361 67.7364C69.5906 65.8837 70.729 64.0239 71.5834 61.8323C72.4029 59.7121 72.9652 57.2892 73.1319 53.742C73.292 50.1864 73.3334 49.0531 73.3334 40.0003C73.3334 30.9476 73.292 29.8114 73.1319 26.2559C72.9652 22.7073 72.4029 20.285 71.5834 18.1656C70.729 15.9732 69.5906 14.1135 67.7361 12.2608C65.8819 10.4066 64.0277 9.26772 61.8332 8.41699C59.7082 7.59272 57.2846 7.03091 53.7359 6.86837C50.1803 6.70656 49.0484 6.66699 39.9927 6.66699H40.0031ZM37.0128 12.6739C37.9003 12.6726 38.8906 12.6739 40.0031 12.6739C48.9032 12.6739 49.9581 12.7059 53.4727 12.8656C56.7228 13.0142 58.4867 13.5573 59.6617 14.0135C61.2173 14.6177 62.3263 15.3399 63.4923 16.5066C64.6589 17.6732 65.3812 18.7844 65.9868 20.3399C66.443 21.5135 66.9868 23.2774 67.1347 26.5274C67.2944 30.0413 67.3291 31.0968 67.3291 39.9927C67.3291 48.8885 67.2944 49.9441 67.1347 53.4579C66.986 56.7079 66.443 58.4718 65.9868 59.6455C65.3826 61.201 64.6589 62.3087 63.4923 63.4746C62.3256 64.6413 61.2179 65.3635 59.6617 65.9677C58.4881 66.426 56.7228 66.9677 53.4727 67.1163C49.9588 67.276 48.9032 67.3108 40.0031 67.3108C31.1023 67.3108 30.0475 67.276 26.5336 67.1163C23.2835 66.9663 21.5196 66.4232 20.3439 65.967C18.7884 65.3629 17.6772 64.6406 16.5105 63.4739C15.3439 62.3073 14.6216 61.1989 14.016 59.6427C13.5598 58.4691 13.016 56.7052 12.8681 53.4552C12.7084 49.9413 12.6765 48.8858 12.6765 39.9844C12.6765 31.0829 12.7084 30.0329 12.8681 26.5191C13.0168 23.2691 13.5598 21.5052 14.016 20.3302C14.6202 18.7746 15.3439 17.6635 16.5105 16.4968C17.6772 15.3302 18.7884 14.6079 20.3439 14.0024C21.5189 13.5441 23.2835 13.0024 26.5336 12.8531C29.6086 12.7142 30.8002 12.6726 37.0128 12.6656V12.6739ZM57.7964 18.2087C55.5881 18.2087 53.7963 19.9982 53.7963 22.2073C53.7963 24.4156 55.5881 26.2073 57.7964 26.2073C60.0047 26.2073 61.7964 24.4156 61.7964 22.2073C61.7964 19.9989 60.0047 18.2087 57.7964 18.2087ZM40.0031 22.8823C30.5496 22.8823 22.8849 30.5468 22.8849 40.0003C22.8849 49.4538 30.5496 57.1149 40.0031 57.1149C49.4567 57.1149 57.1186 49.4538 57.1186 40.0003C57.1186 30.5468 49.4567 22.8823 40.0031 22.8823ZM40.0031 28.8892C46.1393 28.8892 51.1144 33.8635 51.1144 40.0003C51.1144 46.1364 46.1393 51.1114 40.0031 51.1114C33.8662 51.1114 28.8919 46.1364 28.8919 40.0003C28.8919 33.8635 33.8662 28.8892 40.0031 28.8892Z" fill="currentColor"/></svg>
+</a><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 80 80"><g clip-path="url(#cl_li)"><path d="M67.3027 6.66699H12.6972C9.36663 6.66699 6.66663 9.36699 6.66663 12.6975V67.3029C6.66663 70.6337 9.36663 73.3337 12.6972 73.3337H67.3026C70.6333 73.3337 73.3333 70.6337 73.3333 67.3029V12.6975C73.3333 9.36699 70.6333 6.66699 67.3027 6.66699ZM27.2961 64.2314C27.2961 65.2007 26.5104 65.9864 25.5411 65.9864H18.0706C17.1014 65.9864 16.3157 65.2007 16.3157 64.2314V32.9153C16.3157 31.946 17.1014 31.1604 18.0706 31.1604H25.5411C26.5104 31.1604 27.2961 31.946 27.2961 32.9153V64.2314ZM21.8059 28.2084C17.8863 28.2084 14.7089 25.0309 14.7089 21.1113C14.7089 17.1918 17.8863 14.0143 21.8059 14.0143C25.7254 14.0143 28.9029 17.1918 28.9029 21.1113C28.9029 25.0309 25.7256 28.2084 21.8059 28.2084ZM66.3368 64.3727C66.3368 65.2638 65.6143 65.9864 64.7232 65.9864H56.7068C55.8157 65.9864 55.0932 65.2638 55.0932 64.3727V49.6837C55.0932 47.4925 55.7359 40.0815 49.3666 40.0815C44.4261 40.0815 43.424 45.1541 43.2228 47.4305V64.3727C43.2228 65.2638 42.5005 65.9864 41.6092 65.9864H33.856C32.9649 65.9864 32.2424 65.2638 32.2424 64.3727V32.774C32.2424 31.8829 32.9649 31.1604 33.856 31.1604H41.6092C42.5003 31.1604 43.2228 31.8829 43.2228 32.774V35.5061C45.0548 32.7569 47.7773 30.6349 53.574 30.6349C66.4103 30.6349 66.3368 42.6272 66.3368 49.2164V64.3727Z" fill="currentColor"/></g><defs><clipPath id="cl_li"><rect width="66.6667" height="66.6667" fill="white" transform="translate(6.66663 6.66699)"/></clipPath></defs></svg>
+</a></div>
+        </div>
+      </div>
+      <div class="p-about"><p>Продуктовий дизайнер, який працює з AI-продуктами. Три роки досвіду в продуктових командах: від першої гіпотези до запуску.</p><p>Допомагаю дизайнерам впевнено говорити про свій досвід: розбираємо CV, портфоліо й кейси та готуємось до співбесід.</p><p>Працюю один на один: спершу розбираємо твій запит, потім домовляємось про формат і план.</p></div>
+      <div class="p-tabs" role="tablist">
+        <button class="on" type="button" role="tab" data-tab="svc"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.56641 4.65724C5.9435 4.55472 6.34029 4.5 6.74986 4.5H17.2499C17.6594 4.5 18.0562 4.55472 18.4333 4.65724C17.9406 3.67454 16.924 3 15.7499 3H8.24986C7.0757 3 6.0591 3.67454 5.56641 4.65724Z"/><path fill-rule="evenodd" d="M2.25 12C2.25 10.3431 3.59315 9 5.25 9H18.75C20.4069 9 21.75 10.3431 21.75 12V18C21.75 19.6569 20.4069 21 18.75 21H5.25C3.59315 21 2.25 19.6569 2.25 18V12Z"/><path fill-rule="evenodd" d="M5.24986 7.5C4.84029 7.5 4.4435 7.55472 4.06641 7.65724C4.5591 6.67454 5.5757 6 6.74986 6H17.2499C18.424 6 19.4406 6.67454 19.9333 7.65724C19.5562 7.55472 19.1594 7.5 18.7499 7.5H5.24986Z"/></svg>Послуги</button>
+        <button type="button" role="tab" data-tab="about"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M7.49996 6C7.49996 3.51472 9.51468 1.5 12 1.5C14.4852 1.5 16.5 3.51472 16.5 6C16.5 8.48528 14.4852 10.5 12 10.5C9.51468 10.5 7.49996 8.48528 7.49996 6Z"/><path fill-rule="evenodd" d="M3.75121 20.1053C3.82855 15.6156 7.49195 12 12 12C16.5081 12 20.1716 15.6157 20.2487 20.1056C20.2538 20.4034 20.0823 20.676 19.8116 20.8002C17.4327 21.8918 14.7865 22.5 12.0003 22.5C9.21382 22.5 6.5674 21.8917 4.18829 20.7999C3.91762 20.6757 3.74608 20.4031 3.75121 20.1053Z"/></svg>Про ментора</button>
+        <button type="button" role="tab" data-tab="rev"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.0003 2.25C9.57113 2.25 7.18302 2.42773 4.84836 2.771C2.87004 3.06188 1.5 4.79455 1.5 6.74064V12.7593C1.5 14.7054 2.87004 16.4381 4.84836 16.729C5.72491 16.8579 6.60901 16.9634 7.5 17.045V21C7.5 21.3033 7.68273 21.5768 7.96299 21.6929C8.24324 21.809 8.56583 21.7448 8.78033 21.5303L12.9638 17.3468C13.0318 17.2788 13.1266 17.2374 13.2302 17.2348C15.2361 17.1851 17.2123 17.0142 19.1516 16.7291C21.1299 16.4382 22.5 14.7056 22.5 12.7595V6.74056C22.5 4.79445 21.1299 3.06177 19.1516 2.77091C16.8171 2.4277 14.4292 2.25 12.0003 2.25ZM8.25 8.625C7.62868 8.625 7.125 9.12868 7.125 9.75C7.125 10.3713 7.62868 10.875 8.25 10.875C8.87132 10.875 9.375 10.3713 9.375 9.75C9.375 9.12868 8.87132 8.625 8.25 8.625ZM10.875 9.75C10.875 9.12868 11.3787 8.625 12 8.625C12.6213 8.625 13.125 9.12868 13.125 9.75C13.125 10.3713 12.6213 10.875 12 10.875C11.3787 10.875 10.875 10.3713 10.875 9.75ZM15.75 8.625C15.1287 8.625 14.625 9.12868 14.625 9.75C14.625 10.3713 15.1287 10.875 15.75 10.875C16.3713 10.875 16.875 10.3713 16.875 9.75C16.875 9.12868 16.3713 8.625 15.75 8.625Z"/></svg>Відгуки</button>
+      </div>
+      <div class="p-panel" data-panel="svc"><div class="p-svcs">
+      <div class="svc"><div class="svc-h"><p class="svc-t">Розбір портфоліо</p><p class="svc-p">10 000 грн</p></div><ul><li>Ти надсилаєш актуальне CV</li><li>Перший дзвінок — детальний розбір наживо</li><li>Ти вносиш правки</li><li>Другий дзвінок — даю фінальні коментарі</li></ul><a class="btn btn-green" href="#">Звернутись за допомогою</a></div>
+      <div class="svc"><div class="svc-h"><p class="svc-t">Майстер-клас з нетворкінгу</p><p class="svc-p">7.500 грн</p></div><ul><li>Теоретичні основи нетворкінгу</li><li>Практичні вправи в групі</li><li>Фідбек на твої презентаційні навички</li></ul><a class="btn btn-green" href="#">Звернутись за допомогою</a></div>
+      <div class="svc"><div class="svc-h"><p class="svc-t">Тренінг по співбесідах</p><p class="svc-p">6.000 грн</p></div><ul><li>Моделювання співбесід</li><li>Аналіз твоїх відповідей</li><li>Стратегії успішного проходження співбесід</li></ul><a class="btn btn-green" href="#">Звернутись за допомогою</a></div>
+      <div class="svc"><div class="svc-h"><p class="svc-t">Консультація по кар'єрі</p><p class="svc-p">5.000 грн</p></div><ul><li>Обговорення твоїх цілей</li><li>Допомога в плануванні кар'єрного шляху</li><li>Рекомендації по резюме та супровідному листу</li></ul><a class="btn btn-green" href="#">Звернутись за допомогою</a></div></div>
+      </div>
+      <div class="p-panel p-aboutm" data-panel="about" hidden><section><h3>Про ментора</h3><p>Фокус на AI-продуктах, метриках і побудові продуктових процесів.</p></section><section><h3>Окремо сильний у:</h3><ul><li>перекладі складних технічних і бізнес-концепцій у зрозумілий та робочий UX</li><li>роботі з метриками, воронками й вимірюваним результатом</li><li>побудові процесів і веденні продуктової роботи</li></ul></section><section><h3>Додатково</h3><p>Також брав участь у наймі дизайнерів, тому добре розумію, як виглядає оцінка кандидата зсередини: на що реально дивляться в CV, портфоліо й кейсах і де найчастіше втрачається сильний досвід через погане подання. Допомагаю дизайнерам розібратися у власному досвіді, правильно його подати й знайти конкретні точки росту, і в окремих кейсах, і в підході до роботи загалом.</p></section></div>
+      <div class="p-panel" data-panel="rev" hidden><h3 class="p-rh">Відгуки</h3><div class="p-revs"><article class="rev"><header><i style="background:#b1b3ff">Б</i><b>Богдан</b><span>@BgdPopov</span></header><p>Юрій розібрав моє CV і показав, де втрачається сильний досвід. Я навіть не помічав, як слабко звучать мої формулювання…</p><a href="#">Читати далі</a></article><article class="rev"><header><i style="background:#ffc7ad">Г</i><b>Григорій</b><span>@BgdPopov</span></header><p>Прийшов із портфоліо, яке не давало відповідей на вакансії. Юрій розібрав кожен кейс: що залишити, що скоротити…</p><a href="#">Читати далі</a></article><article class="rev"><header><i style="background:#e1f766">О</i><b>Остап</b><span>@BgdPopov</span></header><p>Готувався до співбесіди в продуктову компанію. Юрій змоделював інтерв’ю й розібрав мої відповіді…</p><a href="#">Читати далі</a></article><article class="rev"><header><i style="background:#ffd44f">Р</i><b>Роман</b><span>@BgdPopov</span></header><p>Дуже корисний розбір CV. Юрій розуміє, як усе виглядає з боку того, хто наймає: підказав, які формулювання посилюють резюме…</p><a href="#">Читати далі</a></article></div></div>
+    </div>
+    <div class="p-cta"><a class="btn btn-dark" href="#">Зв’язатись з ментором</a></div>
+  </div>
+</div>
+
+<script>
+
+  // Mentor cards stand upright, slightly turned toward the centre. cx/cy = card centre in the hero stage, r* = tilt in deg.
+  const mentors=[
+    {name:'Ніна Войтович', rank:'Н', suit:'♠', img:'card-nina',   c:'#23356e', bg:'#9fb4ef', o:'#d23b3b', s:'#1b1b2e', cx:250, cy:330, rz:-14, ry:24,  rx:-6},
+    {name:'Ірина Пефтій',   rank:'С', suit:'♦', img:'card-iryna', c:'#7a4b06', bg:'#f5cf6a', o:'#c0262f', s:'#c0262f', cx:910, cy:640, rz:-10, ry:18,  rx:-8},
+    {name:'Юрій Черній',   rank:'Ю', suit:'♥', img:'card-yurii',  c:'#8c1f2c', bg:'#f2a59a', o:'#23356e', s:'#c0262f', cx:1210,cy:360, rz:12,  ry:-26, rx:-6}
+  ];
+  const W=200, H=280;
+  const CARD_SCALE=.825;  // cards render at 82.5% of the 186×296 box, around their centre
+  const deck=document.querySelector('.deck');
+  const els=mentors.map(m=>{
+    const el=document.createElement('div');
+    el.className='pcard';
+    el.setAttribute('role','img');
+    el.setAttribute('aria-label',m.name+', ментор');
+    el.style.cssText='--c:'+m.c+';--bg:'+m.bg+';--o:'+m.o+';--s:'+m.s;
+    el.innerHTML='<img src="assets/hata2/'+m.img+'.png" alt="" draggable="false">';
+    deck.appendChild(el);
+    return el;
+  });
+
+  // The page scrolls normally; the first ~460px of scroll lift the cards from behind the hill into their pose.
+  // Each card starts slightly after the previous one; the value is smoothed every frame.
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const easeOut=t=>1-Math.pow(1-t,3);
+  let target=0, cur=0, running=false;
+  const DIST=460, RISE=620, STAGGER=.14, SPAN=.72;
+  const render=()=>{
+    els.forEach((el,i)=>{
+      const t=easeOut(Math.min(1,Math.max(0,(cur-i*STAGGER)/SPAN))), k=1-t;
+      const m=mentors[i];
+      el.style.transform='translate3d('+(m.cx-W/2)+'px,'+(m.cy-H/2+RISE*k).toFixed(1)+'px,0) rotateX('+(m.rx+35*k).toFixed(2)+'deg) rotateY('+m.ry+'deg) rotateZ('+(m.rz*(1+.5*k)).toFixed(2)+'deg) scale('+CARD_SCALE+')';
+    });
+  };
+  const loop=()=>{
+    cur+=(target-cur)*.07;
+    if(Math.abs(target-cur)<.001) cur=target;
+    render();
+    if(cur!==target) requestAnimationFrame(loop); else running=false;
+  };
+  const copy=document.querySelector('.hero-copy');
+  const onScroll=()=>{
+    if(!reduce) copy.style.transform='translateY('+Math.min(scrollY,1100)*.55+'px)';
+    target=Math.min(1,Math.max(0,scrollY/DIST));
+    if(reduce){cur=target>0?1:0;render();return;}
+    if(!running){running=true;requestAnimationFrame(loop);}
+  };
+  addEventListener('scroll',onScroll,{passive:true});
+
+  // The village scales with the placeholder width, so scale the deck the same way to keep cards on the hill
+  const hero=document.querySelector('.hero');
+  const fitDeck=()=>{deck.style.transform='scale('+(1+Math.max(0,hero.clientWidth/1420-1)*.5)+')'};
+  fitDeck();addEventListener('resize',()=>{fitDeck();onScroll()});
+  render();onScroll();
+
+  // community: hovering a badge swaps the background ornament for that badge's snowflake
+  (()=>{
+    const sec=document.querySelector('.community'); if(!sec) return;
+    sec.querySelectorAll('.badge').forEach(b=>{
+      b.addEventListener('mouseenter',()=>sec.setAttribute('data-active',b.dataset.i));
+      b.addEventListener('mouseleave',()=>sec.removeAttribute('data-active'));
+    });
+  })();
+
+  // Mentor pop-up (Figma 1030:1452): bottom sheet over a dimmed page
+  (()=>{
+    const MENTORS=[{"name":"Черній Юрій","role":"AI Native Product Designer\n3 роки досвіду","photo":"assets/hata2/m1.jpg"},{"name":"Чупров Данило","role":"Product Designer  ·  4 роки досвіду","photo":"assets/hata2/m2.jpg"},{"name":"Большедворська Анна","role":"Sr. Product Designer  ·  8 років досвіду\nментор","photo":"assets/hata2/m3.jpg"},{"name":"Войтович Ніна","role":"Product Designer  ·  3 роки досвіду\nментор  ·  засновниця","photo":"assets/hata2/m4.jpg"},{"name":"Корж Юлія","role":"Sr. UI/UX Designer, Product Analyst\n9 років досвіду","photo":"assets/hata2/m5.jpg"},{"name":"Тонєв Євген","role":"Principal Product Designer  ·  18 років досвіду","photo":"assets/hata2/m6.jpg"},{"name":"Пефтій Ірина","role":"Product Designer  ·  5 років досвіду","photo":"assets/hata2/m7.jpg"}];
+    const pop=document.getElementById('pop'), overlay=document.querySelector('.pop-overlay');
+    let opener=null;
+    const open=(i,btn)=>{
+      const m=MENTORS[i]; if(!m) return; opener=btn;
+      document.getElementById('pop-photo').src=m.photo; document.getElementById('pop-photo').alt=m.name;
+      document.getElementById('pop-name').textContent=m.name.split(' ').reverse().join(' '); document.getElementById('pop-role').textContent=m.role;
+      pop.querySelector('.sheet').scrollTop=0; if(window.__showTab) window.__showTab('svc');
+      document.body.classList.add('pop-open'); pop.setAttribute('aria-hidden','false');
+      requestAnimationFrame(()=>{pop.classList.add('open');overlay.classList.add('open');});
+      setTimeout(()=>pop.querySelector('.pop-x').focus(),50);
+    };
+    const close=()=>{
+      pop.classList.remove('open'); overlay.classList.remove('open'); pop.setAttribute('aria-hidden','true');
+      document.body.classList.remove('pop-open'); if(opener) opener.focus();
+    };
+
+    // swipe down (touch) or drag down (mouse on the handle / header) to dismiss, like a mobile bottom sheet
+    const sheet=pop.querySelector('.sheet');
+    let sy=0, dy=0, t0=0, dragging=false, armed=false, fromTouch=false;
+    const begin=(y,touch)=>{armed=true;dragging=false;sy=y;dy=0;t0=performance.now();fromTouch=touch;};
+    const move=(y,e)=>{
+      if(!armed) return;
+      dy=y-sy;
+      if(!dragging){
+        if(dy>8 && sheet.scrollTop<=0){dragging=true;pop.style.transition='none';overlay.style.transition='none';}
+        else return;
+      }
+      if(e&&e.cancelable) e.preventDefault();
+      dy=Math.max(0,dy);
+      pop.style.transform='translateY('+dy+'px)';
+      overlay.style.opacity=String(Math.max(0,1-dy/Math.max(300,sheet.offsetHeight*.7)));
+    };
+    const end=()=>{
+      if(!armed) return; armed=false;
+      if(!dragging) return; dragging=false;
+      const v=dy/Math.max(1,performance.now()-t0);       // px per ms
+      pop.style.transition='';overlay.style.transition='';
+      pop.style.transform='';overlay.style.opacity='';
+      if(dy>110||v>.6) close();                          // far enough or flicked: dismiss; otherwise the sheet springs back
+    };
+    sheet.addEventListener('touchstart',e=>begin(e.touches[0].clientY,true),{passive:true});
+    sheet.addEventListener('touchmove',e=>move(e.touches[0].clientY,e),{passive:false});
+    sheet.addEventListener('touchend',end); sheet.addEventListener('touchcancel',end);
+    sheet.addEventListener('mousedown',e=>{
+      if(e.button!==0||e.target.closest('a,button,.p-about,.p-svcs')) return;
+      begin(e.clientY,false); e.preventDefault();
+    });
+    addEventListener('mousemove',e=>{if(armed&&!fromTouch) move(e.clientY,e);});
+    addEventListener('mouseup',()=>{if(!fromTouch) end();});
+    document.querySelectorAll('[data-mentor]').forEach(b=>b.addEventListener('click',()=>open(+b.dataset.mentor,b)));
+    document.querySelectorAll('[data-pop-close]').forEach(el=>el.addEventListener('click',close));
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&pop.classList.contains('open')) close();});
+    const showTab=k=>{pop.querySelectorAll('.p-tabs button').forEach(x=>x.classList.toggle('on',x.dataset.tab===k));pop.querySelectorAll('.p-panel').forEach(p=>{p.hidden=p.dataset.panel!==k});};
+    pop.querySelectorAll('.p-tabs button').forEach(t=>t.addEventListener('click',()=>showTab(t.dataset.tab)));
+    window.__showTab=showTab;
+  })();
+
+  // mentor tags: one active at a time
+  document.querySelectorAll('.tags button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.tags button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  }));
+</script>
+</body>
+</html>

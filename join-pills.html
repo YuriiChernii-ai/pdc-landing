@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join Product Design Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--dark:#140018;--purple:#a499ff}
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;display:grid;place-items:center;background:var(--dark);font-family:"Inter Tight",Inter,sans-serif}
+
+/* component 612×580: two stacked pills, tilted like the figure; fills with purple on hover */
+.join{position:relative;width:612px;height:580px;cursor:pointer}
+.pill{position:absolute;width:486px;height:256px;border-radius:128px;transform:rotate(3.1deg);overflow:hidden;
+  box-shadow:inset 0 0 0 2px rgba(164,153,255,.55);transition:box-shadow .5s}
+.pill.p1{left:56px;top:62px}
+.pill.p2{left:44px;top:304px}
+.pill .fill{position:absolute;inset:0;background:var(--purple);clip-path:circle(0% at 50% 50%)}
+.pill b{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:500;font-size:84px;line-height:.98;letter-spacing:-.03em;color:#fff;transform:scale(0);transform-origin:50% 50%}
+.join.on .pill{box-shadow:inset 0 0 0 2px rgba(164,153,255,0)}
+
+/* participants: our own illustrated avatars with a sticker badge instead of flags */
+.pp{position:absolute;border-radius:50%;background:var(--c);border:4px solid #fff;transform:scale(0);pointer-events:none}
+.pp img.a{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%}
+@media (prefers-reduced-motion:reduce){.pill .fill{clip-path:none}.pill b{transform:none}.pp{transform:none}}
+</style>
+</head>
+<body>
+<div class="join" id="join" aria-label="Join Product Design Club!">
+  <div class="pill p1"><i class="fill"></i><b>Join<br>Product</b></div>
+  <div class="pill p2"><i class="fill"></i><b>Design<br>Cluuub!</b></div>
+  <div class="pp" style="left:92px;top:58px;width:70px;height:70px;--c:#ffc7ad"><img class="a" src="assets/v4/l-yurii.png" alt=""></div>
+  <div class="pp" style="left:418px;top:186px;width:100px;height:100px;--c:#e1f766"><img class="a" src="assets/v4/l-nina.png" alt=""></div>
+  <div class="pp" style="left:96px;top:496px;width:64px;height:68px;--c:#ffd44f"><img class="a" src="assets/v4/l-anna.png" alt=""></div>
+  <div class="pp" style="left:352px;top:498px;width:70px;height:76px;--c:#03dcbe"><img class="a" src="assets/v4/l-iryna.png" alt=""></div>
+  <div class="pp" style="left:442px;top:426px;width:48px;height:48px;--c:#b1b3ff"><img class="a" src="assets/v4/av-serhii.png" alt=""></div>
+  <div class="pp" style="left:430px;top:482px;width:46px;height:46px;--c:#fdc3fe"><img class="a" src="assets/v4/av-iryna.png" alt=""></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(()=>{
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const root=document.getElementById('join');
+  const fills=root.querySelectorAll('.fill'), texts=root.querySelectorAll('.pill b'), pps=[...root.querySelectorAll('.pp')];
+  const drift=[];
+  let tl=null;
+  const startDrift=()=>pps.forEach((el,i)=>{
+    const d=gsap.to(el,{x:gsap.utils.random(-14,14),y:gsap.utils.random(-12,12),duration:gsap.utils.random(5.5,8.5),ease:'sine.inOut',yoyo:true,repeat:-1,force3D:false});
+    drift.push(d);
+  });
+  const stopDrift=()=>{drift.splice(0).forEach(d=>d.kill());};
+  const enter=()=>{
+    if(tl)tl.kill(); stopDrift();
+    root.classList.add('on');
+    tl=gsap.timeline();
+    tl.to(fills,{clipPath:'circle(75% at 50% 50%)',duration:.8,ease:'power3.out',stagger:.08},0)
+      .to(texts,{scale:1,duration:.7,ease:'power3.out',stagger:.1,force3D:false},.18)
+      .to(pps,{scale:1,duration:.7,ease:'power3.out',stagger:.07,force3D:false},.3)
+      .add(startDrift,'>-.2');
+  };
+  const leave=()=>{
+    if(tl)tl.kill(); stopDrift();
+    root.classList.remove('on');
+    tl=gsap.timeline();
+    tl.to(pps,{scale:0,x:0,y:0,duration:.35,ease:'power2.in',stagger:.03,force3D:false},0)
+      .to(texts,{scale:0,duration:.35,ease:'power2.in',force3D:false},0)
+      .to(fills,{clipPath:'circle(0% at 50% 50%)',duration:.5,ease:'power2.inOut'},.1);
+  };
+  root.addEventListener('mouseenter',enter);
+  root.addEventListener('mouseleave',leave);
+})();
+</script>
+</body>
+</html>
